@@ -1,0 +1,27 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">{{ category.name }}</h1>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">${{ product.price }}</p>
+                        {% if product.on_sale %}
+                             <span class="badge bg-danger">On Sale!</span>
+                        {% endif %}
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p>No products in this category yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Categories</h1>
+    <div class="list-group">
+        {% for category in categories %}
+            <a href="{% url 'product_list' category.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                {{ category.name }}
+                <span class="badge bg-primary rounded-pill">{{ category.num_products }}</span>
+            </a>
+        {% empty %}
+            <li class="list-group-item">No categories yet.</li>
+        {% endfor %}
+    </div>
+{% endblock %}

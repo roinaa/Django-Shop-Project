@@ -1,0 +1,16 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger">
+        <h1 class="alert-heading">Confirm Deletion</h1>
+        <p>Are you sure you want to delete the product: <strong>"{{ product.name }}"</strong>?</p>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+{% endblock %}
