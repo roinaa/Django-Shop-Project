@@ -1,4 +1,4 @@
-from django.db.models import Count, F
+from django.db.models import Count, F, Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -20,11 +20,24 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         self.category = Category.objects.get(id=self.kwargs['category_id'])
-        return Product.objects.filter(category=self.category)
+        queryset = Product.objects.filter(category=self.category)
+
+        min_price = self.request.GET.get('min_price')
+        max_price = self.request.GET.get('max_price')
+
+        if min_price and min_price.isdigit():
+            queryset = queryset.filter(price__gte=min_price)
+
+        if max_price and max_price.isdigit():
+            queryset = queryset.filter(price__lte=max_price)
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
+        context['min_price'] = self.request.GET.get('min_price', '')
+        context['max_price'] = self.request.GET.get('max_price', '')
         return context
 
 class ProductDetailView(DetailView):
@@ -62,3 +75,17 @@ class ProductDeleteView(DeleteView):
     context_object_name = 'product'
     pk_url_kwarg = 'product_id'
     success_url = reverse_lazy('category_list')
+
+
+class SearchResultsView(ListView):
+    model = Product
+    template_name = 'shop/search_results.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '') # ვიღებთ საძიებო სიტყვას URL-დან
+        if query:
+            return Product.objects.filter(
+                Q(name__icontains=query) | Q(description__icontains=query)
+            )
+        return Product.objects.none() # თუ საძიებო სიტყვა ცარიელია, არაფერს ვაბრუნებთ

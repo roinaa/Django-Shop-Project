@@ -32,26 +32,31 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <form method="POST" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
-                        </form>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
+                            </form>
+                        </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
                     {% endif %}
                 </ul>
+
+                <form class="d-flex ms-auto" method="GET" action="{% url 'search_results' %}">
+                    <input class="form-control me-2" type="search" placeholder="Search..." name="q">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </nav>
