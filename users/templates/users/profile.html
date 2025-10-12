@@ -1,0 +1,24 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card bg-secondary text-white">
+        <div class="card-body">
+            <h2 class="mb-4">Profile Information</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <hr>
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Update Info</legend>
+                    {{ u_form|crispy }}
+                    {{ p_form|crispy }}
+                </fieldset>
+                <div class="form-group mt-4">
+                    <button class="btn btn-info" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
